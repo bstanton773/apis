@@ -17,4 +17,12 @@ class User(db.Model):
         return f"<User: {self.email}>"
 
     def to_dict(self):
-        return {'email': self.email, 'password': 'classified', 'created_on': self.created_on}
+        return {'id': self.id, 'email': self.email, 'password': 'classified', 'created_on': self.created_on}
+
+    def from_dict(self, data):
+        for field in ['email', 'password']:
+            if field in data:
+                if field == 'password':
+                    setattr(self, field, generate_password_hash(data[field]))
+                else:
+                    setattr(self, field, data[field])
